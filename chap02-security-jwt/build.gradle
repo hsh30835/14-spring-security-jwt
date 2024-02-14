@@ -1,0 +1,43 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.2'
+    id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.ohgiraffers'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // jpa를 사용하기 위한 lib이다
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    // security를 사용하기 위한 lib이다
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // spring에서 web의 요청을 받을 수 있도록 하는 lib이다
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    // mysql과 연결하기 위한 lib이다
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+
+    implementation "io.jsonwebtoken:jjwt:0.9.1"
+    // jpa토큰을 사용하기 위한 lib이다
+
+    // https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
+    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+    // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
+    // http 요청이 들어올 때 요청 데이터가 json으로 반환되는데 이것을 간변하게 포멧팅 해주는 lib이다
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
