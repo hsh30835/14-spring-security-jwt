@@ -1,6 +1,7 @@
 package com.ohgiraffers.security.auth.config;
 
 import com.ohgiraffers.security.auth.filter.CustomAuthenticationFilter;
+import com.ohgiraffers.security.auth.filter.JwtAuthorizationFilter;
 import com.ohgiraffers.security.auth.handler.CustomAuthFailureHandler;
 import com.ohgiraffers.security.auth.handler.CustomAuthSuccessHandler;
 import com.ohgiraffers.security.auth.handler.CustomAuthenticationProvider;
@@ -15,12 +16,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
@@ -50,7 +49,7 @@ public class WebSecurityConfig {
                 // 시큐리티를 통해 세션을 만들지 않음
                 .formLogin(form -> form.disable())
                 // 스프링시큐리티에서 제공하는 폼을 사용하지 않겠다
-                .addFilterBefore(customAutheniactionFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(basic -> basic.disable());
 
         // http 커스텀을 했고 이걸 사용하려면 build로 체인건다
@@ -97,8 +96,8 @@ public class WebSecurityConfig {
         authenticationFilter.setFilterProcessesUrl("/login");
         authenticationFilter.setAuthenticationSuccessHandler(customAuthSuccessHandler());
         authenticationFilter.setAuthenticationFailureHandler(customAuthFailureHandler());
-
-        return customAuthenticationFilter();
+        authenticationFilter.afterPropertiesSet();
+        return authenticationFilter;
     }
 
     /**
@@ -117,5 +116,13 @@ public class WebSecurityConfig {
     @Bean
     public CustomAuthFailureHandler customAuthFailureHandler(){
         return new CustomAuthFailureHandler();
+    }
+
+    /**
+     * 9. 사용자 요청시 수행되는 메서드
+     * @return : JwtAuthorizationFilter
+     * */
+    public JwtAuthorizationFilter jwtAuthorizationFilter(){
+        return new JwtAuthorizationFilter(authenticationManager());
     }
 }

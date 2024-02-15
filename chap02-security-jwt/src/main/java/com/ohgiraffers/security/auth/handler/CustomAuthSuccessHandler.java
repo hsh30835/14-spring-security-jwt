@@ -22,7 +22,7 @@ import java.util.HashMap;
 @Configuration
 public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         User user = ((DetailsUser) authentication.getPrincipal()).getUser();
         JSONObject jsonValue = (JSONObject) ConvertUtil.convertObjectToJsonObject(user);
         HashMap<String,Object> responseMap = new HashMap<>();

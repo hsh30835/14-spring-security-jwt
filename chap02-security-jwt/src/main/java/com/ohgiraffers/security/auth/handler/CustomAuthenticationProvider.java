@@ -36,7 +36,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         // 단방향 암호화는 복호화가 안되고 양방향은 복호화가 된다
         // 사용자가 입력한 username, password와 아이디의 비밀번호를 비교하는 로직을 수행함
 
-        return new UsernamePasswordAuthenticationToken(foundUser.getUsername(), foundUser.getPassword(), foundUser.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(foundUser, password, foundUser.getAuthorities());
         // 권한 목록을 반환타입으로 지정해야됨
     }
     // 이 메서드가 하는 역할 : 사용자 정보를 조회한다음에 토큰값이랑 비교해줌
